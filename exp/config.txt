@@ -1,7 +1,7 @@
 [HIT Configuration]
-title = Associative Learning 1
-description = Learn words in an alien language.
-amt_keywords = Psychology, Learning
+title = Active Memory Preexpose
+description = Try to remember each object!
+amt_keywords = Psychology, Memory
 lifetime = 24
 us_only = true
 approve_requirement = 95
@@ -9,14 +9,14 @@ contact_email_on_error = george.kachergis@gmail.com
 ad_group = Default psiTurk 
 psiturk_keywords = learning, memory, psychology
 organization_name = New York University
-browser_exclude_rule = MSIE, mobile, tablet
+browser_exclude_rule = MSIE
 
 [Database Parameters]
 database_url = sqlite:///participants.db
 table_name = activemem
 
 [Server Parameters]
-host = localhost
+host = 0.0.0.0
 port = 22362
 cutoff_time = 30
 logfile = server.log
@@ -28,7 +28,7 @@ threads = auto
 
 [Task Parameters]
 experiment_code_version = 1.0
-num_conds = 4
+num_conds = 1
 num_counters = 1
 
 [Shell Parameters]
