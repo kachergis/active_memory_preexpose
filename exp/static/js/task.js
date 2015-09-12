@@ -147,7 +147,7 @@ var Controls = function(stage) {
 	self.cancel.btn.on('mouseout', function(e) {
 		self.cancel.btn.attr('fill', 'white');
 	})
-	self.cancel.btn.on('click', function(e) {
+	self.cancel.btn.on('touchstart', function(e) {
 		output(['aborted']);
 		clear_timeouts();
 		if (active_item) active_item.unstudy(exp.chooser);
@@ -301,7 +301,7 @@ var Item = function(pars) {
 
 	self.listen = function() {
 
-		self.disp.on('click', function() { // or 'touchstart'
+		self.disp.on('touchstart', function() { // or 'touchstart'
 
 			// if not active, then proceed with study episode
 			if (!self.active && active_item==undefined) {
@@ -330,7 +330,7 @@ var Item = function(pars) {
 
 	self.listen_test = function() {
 
-		self.disp.on('click', function() {
+		self.disp.on('touchstart', function() {
 
 			if (self.active) {
 				self.active = false;
@@ -345,7 +345,7 @@ var Item = function(pars) {
 	}
 
 	self.unlisten = function() {
-		self.disp.on('click', function() {});
+		self.disp.on('touchstart', function() {});
 	};
 
 
@@ -398,7 +398,7 @@ var StudyPhase = function(block) {
 
 	self.expose_free = function(cols_to_expose) {
 		output(['expose_begin']);
-
+		$("#preexpose-instruction").css('visibility','visible');
 		$.each(self.items, function(i, item) {
 			item.frame_inactive();
 			if(PREEXPOSE[cols_to_expose][item.col]) {
@@ -417,7 +417,8 @@ var StudyPhase = function(block) {
 	self.study_active = function() {
 		output(['active_study_begin']);
 		block_start_time = timestamp();
-
+		$("#preexpose-instruction").css('visibility','hidden');
+		$("#study-instruction").css('visibility','visible');
 		$.each(self.items, function(i, item) {
 			item.listen();
 		})
@@ -458,9 +459,9 @@ var StudyPhase = function(block) {
 
 	};
 
-	self.controls.start.on('click', function(e) {
+	self.controls.start.on('touchstart', function(e) {
 		output(['start']);
-		self.controls.start.on('click', function() {});
+		self.controls.start.on('touchstart', function() {});
 		self.controls.start.remove();
 		self.begin();
 	});
@@ -519,7 +520,7 @@ var FamiliarizationStudyPhase = function(block) {
 	// ToDo: left = [true, true, false, false];
 	self.expose_free = function(cols_to_expose) {
 		output(['expose_begin']);
-
+		$("#preexpose-instruction").css('visibility','visible');
 		$.each(self.items, function(i, item) {
 			item.frame_inactive();
 			if(PREEXPOSE_FAM[cols_to_expose][item.col]) {
@@ -538,6 +539,8 @@ var FamiliarizationStudyPhase = function(block) {
 
 	self.study_active = function() {
 		output(['active_study_begin']);
+		$("#preexpose-instruction").css('visibility','hidden');
+		$("#study-instruction").css('visibility','visible');
 		block_start_time = timestamp();
 
 		$.each(self.items, function(i, item) {
@@ -577,9 +580,9 @@ var FamiliarizationStudyPhase = function(block) {
 
 	};
 
-	self.controls.start.on('click', function(e) {
+	self.controls.start.on('touchstart', function(e) {
 		output(['start']);
-		self.controls.start.on('click', function(e) {});
+		self.controls.start.on('touchstart', function(e) {});
 		self.controls.start.remove();
 		self.begin();
 	});
@@ -663,6 +666,7 @@ var FamiliarizationTestPhase = function(block) {
 
 
 	self.test = function() {
+		$("#test-instruction").css('visibility','visible');
 		self.done_btn.attr('opacity', 1.)
 		$.each(self.items, function(i, item) {
 			item.object_on();
@@ -670,7 +674,7 @@ var FamiliarizationTestPhase = function(block) {
 			item.listen_test();
 		})
 
-		self.done_btn.on('click', function() {
+		self.done_btn.on('touchstart', function() {
 			output(['clicked_done'])
 			self.done_btn.btn.attr('stroke', 'green');
 			self.done_btn.btn.attr('fill', 'green');
@@ -685,9 +689,9 @@ var FamiliarizationTestPhase = function(block) {
 		}, TEST_INIT_DELAY);
 	};
 
-	self.controls.start.on('click', function(e) {
+	self.controls.start.on('touchstart', function(e) {
 		output(['start']);
-		self.controls.start.on('click', function() {});
+		self.controls.start.on('touchstart', function() {});
 		self.controls.start.remove();
 		self.begin();
 	});
@@ -780,7 +784,7 @@ var TestPhase = function(block) {
 
 
 	$('#continueModal').modal({'show': false});
-	$('#modalCloseButton').on('click', function(e) {
+	$('#modalCloseButton').on('touchstart', function(e) {
 		self.done_btn.btn.attr('stroke', '#D8D8D8')
 						 .attr('fill', 'white');
 		self.done_btn.btn_frame.attr('stroke', '#D8D8D8')
@@ -791,7 +795,7 @@ var TestPhase = function(block) {
 		self.done_btn.btn_frame.attr('stroke', '#D8D8D8')
 	})
 
-	$('#modalContinueButton').on('click', function(e) {
+	$('#modalContinueButton').on('touchstart', function(e) {
 		self.finish();
 	})
 
@@ -799,14 +803,14 @@ var TestPhase = function(block) {
 		output(['test']);
 
 		self.done_btn.attr('opacity', 1.)
-
+		$("#test-instruction").css('visibility','visible');
 		$.each(self.items, function(i, item) {
 			item.object_on();
 			item.frame_inactive();
 			item.listen_test();
 		})
 
-		self.done_btn.on('click', function() {
+		self.done_btn.on('touchstart', function() {
 			output(['clicked_done'])
 
 			self.done_btn.btn.attr('stroke', 'green');
@@ -883,7 +887,7 @@ var Summary = function() {
 	output(['COMPLETE']);
 	psiTurk.saveData();
 
-	$('#check-button').on('click', function(e) {
+	$('#check-button').on('touchstart', function(e) {
 		Exit();
 	});
 };
@@ -944,24 +948,24 @@ var Experiment = function() {
 			$('#choose-fam').css('display', 'none');
 			$('#choose-study').css('display', 'none');
 		} else {
-			$('#choose-setup').on('click', function() {
+			$('#choose-setup').on('touchstart', function() {
 				window.location = '/setup';
 			})
 
-			$('#choose-fam').on('click', function() {
+			$('#choose-fam').on('touchstart', function() {
 				self.familiarization();
 			})
 
-			$('#choose-study').on('click', function() {
+			$('#choose-study').on('touchstart', function() {
 				self.study();
 			})
 		}
 
-		$('#choose-test').on('click', function() {
+		$('#choose-test').on('touchstart', function() {
 			self.test();
 		})
 
-		$('#choose-finish').on('click', function() {
+		$('#choose-finish').on('touchstart', function() {
 			self.view= new Summary();
 		})
 
