@@ -7,7 +7,7 @@ var	SEED,
 	N_FAM_BLOCKS = 3, //4,
 	NUM_FAM_ITEMS = FAM_NCOLS*FAM_NROWS, // per block
 	FAM_STUDY_BLOCK_TIME = 30000 //2000*NUM_FAM_ITEMS, //60000 * 10,
-	FAM_EXPOSE_DURATION = 2000*FAM_NCOLS*FAM_NROWS / 2,
+	FAM_EXPOSE_DURATION = 6000, // a little long for familiarization
 	STUDY_NROWS = 3,
 	STUDY_NCOLS = 4,
 	N_STUDY_BLOCKS = 3,
@@ -176,7 +176,7 @@ var Item = function(pars) {
 	self.duration = pars['duration'];
 	self.img = pars['image'];
 	self.blocking = pars['blocking'] | true;
-
+	self.preexposed = pars['preexposed'];
 	self.episode = {};
 
 	padding = 10;
@@ -185,7 +185,7 @@ var Item = function(pars) {
 	self.obj_w = self.width - 2 * padding;
 	self.obj_h = self.height - 2 * padding;
 
-	output(['item', 'id='+self.stimid, 'ind='+self.ind, 'row='+self.row, 'col='+self.col, 'image='+self.img]);
+	output(['item', 'id='+self.stimid, 'ind='+self.ind, 'row='+self.row, 'col='+self.col, 'image='+self.img, 'preexpose='+self.preexposed]);
 
 	// state variables
 	self.active = false;
@@ -224,7 +224,7 @@ var Item = function(pars) {
 						  .attr('stroke-width', 5)
 						  .attr('stroke', '#D8D8D8')
 						  .attr('fill', 'none')
-						  .attr('opacity', .8) // GK: changed from 0.
+						  .attr('opacity', 0.) // GK: changed from 0.
 
 
 	self.frame_on = function() {
@@ -375,6 +375,7 @@ var StudyPhase = function(block) {
 
 	for (var i=0; i<self.nrow; i++) {
 		for (var j=0; j<self.ncol; j++) {
+			var preexpose = PREEXPOSE[self.cols_to_expose][j];
 			//var ind = i * self.nrow + j; // works with a square array..
 			var ind = i * self.ncol + j;
 			self.items.push(new Item({'stage': self.stage,
@@ -388,7 +389,7 @@ var StudyPhase = function(block) {
 									  'image': IMAGES[stimuli[block][ind]],
 									  'framedelay': STUDY_FRAME_DELAY,
 									  'duration': STUDY_DURATION,
-										'preexposed': false
+										'preexposed': preexpose
 									 }))
 		};
 	};
@@ -399,6 +400,7 @@ var StudyPhase = function(block) {
 		output(['expose_begin']);
 
 		$.each(self.items, function(i, item) {
+			item.frame_inactive();
 			if(PREEXPOSE[cols_to_expose][item.col]) {
 				item.preexposed = true;
 				item.show(STUDY_EXPOSE_DURATION);
@@ -492,6 +494,7 @@ var FamiliarizationStudyPhase = function(block) {
 
 	for (var i=0; i<self.nrow; i++) {
 		for (var j=0; j<self.ncol; j++) {
+			var preexpose = PREEXPOSE_FAM[self.cols_to_expose][j];
 			//var ind = i * self.nrow + j;
 			var ind = i * self.ncol + j;
 			self.items.push(new Item({'stage': self.stage,
@@ -506,7 +509,7 @@ var FamiliarizationStudyPhase = function(block) {
 									  'image': IMAGES[self.stims[ind]],
 									  'framedelay': STUDY_FRAME_DELAY,
 									  'duration': STUDY_DURATION,
-										'preexposed': false
+										'preexposed': preexpose
 									 }))
 		};
 	};
@@ -518,6 +521,7 @@ var FamiliarizationStudyPhase = function(block) {
 		output(['expose_begin']);
 
 		$.each(self.items, function(i, item) {
+			item.frame_inactive();
 			if(PREEXPOSE_FAM[cols_to_expose][item.col]) {
 				item.preexposed = true;
 				item.show(FAM_EXPOSE_DURATION);
@@ -619,7 +623,8 @@ var FamiliarizationTestPhase = function(block) {
 									  'height': self.item_h,
 									  'image': IMAGES[self.stims[ind]],
 									  'framedelay': STUDY_FRAME_DELAY,
-									  'duration': STUDY_DURATION
+									  'duration': STUDY_DURATION,
+										'preexposed': null
 									 }))
 
 		};
@@ -737,6 +742,7 @@ var TestPhase = function(block) {
 									  'framedelay': TEST_FRAME_DELAY,
 									  'duration': TEST_DURATION,
 									  'blocking': false,
+										'preexposed': null
 									 }))
 		};
 	};
