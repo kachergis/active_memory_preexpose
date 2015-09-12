@@ -6,8 +6,8 @@ var	SEED,
 	FAM_NCOLS = 2,
 	N_FAM_BLOCKS = 3, //4,
 	NUM_FAM_ITEMS = FAM_NCOLS*FAM_NROWS, // per block
-	FAM_STUDY_BLOCK_TIME = 2000*NUM_FAM_ITEMS, //60000 * 10,
-	FAM_EXPOSE_DURATION = 1000*FAM_NCOLS*FAM_NROWS / 2,
+	FAM_STUDY_BLOCK_TIME = 30000 //2000*NUM_FAM_ITEMS, //60000 * 10,
+	FAM_EXPOSE_DURATION = 2000*FAM_NCOLS*FAM_NROWS / 2,
 	STUDY_NROWS = 3,
 	STUDY_NCOLS = 4,
 	N_STUDY_BLOCKS = 3,
@@ -15,12 +15,12 @@ var	SEED,
 	TOTAL_STUDY_ITEMS = N_STUDY_BLOCKS * ITEMS_PER_STUDY_ROUND,
 	STUDY_FRAME_DELAY = 0, // was 500..
 	STUDY_DURATION = 'selfpaced', // 'none' | 'selfpaced' | fixed t
-	STUDY_BLOCK_TIME = 2000*ITEMS_PER_STUDY_ROUND, // 90000,
+	STUDY_BLOCK_TIME = 3000*ITEMS_PER_STUDY_ROUND, // 90000,
 	STUDY_INIT_DELAY = 1000,
 	STUDY_EXPOSE = 'free', // 'none' | 'free' | 'snake'
 	NUM_PREEXPOSED = (STUDY_NROWS*STUDY_NCOLS)/2,
 	NUM_ALLOWED_CLICKS = STUDY_NROWS*STUDY_NCOLS,
-	STUDY_EXPOSE_DURATION = 1000*NUM_PREEXPOSED, // how long images are all shown at beginning of study
+	STUDY_EXPOSE_DURATION = 2000*NUM_PREEXPOSED, // how long images are all shown at beginning of study
 	STUDY_COND = ['left','right','all'], // replace with randomization
 	N_TEST_BLOCKS = 6, // how many do we need? 3bl*12=36 items studied, 12 per test...so 6?
 	TEST_INIT_DELAY = 1000,
@@ -224,7 +224,7 @@ var Item = function(pars) {
 						  .attr('stroke-width', 5)
 						  .attr('stroke', '#D8D8D8')
 						  .attr('fill', 'none')
-						  .attr('opacity', 0.)
+						  .attr('opacity', .8) // GK: changed from 0.
 
 
 	self.frame_on = function() {

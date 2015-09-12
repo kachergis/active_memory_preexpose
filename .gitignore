@@ -1,0 +1,8 @@
+
+*.pyc
+
+exp/.psiturk_history
+
+exp/participants.db
+
+exp/server.log
