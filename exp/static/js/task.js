@@ -147,7 +147,7 @@ var Controls = function(stage) {
 	self.cancel.btn.on('mouseout', function(e) {
 		self.cancel.btn.attr('fill', 'white');
 	})
-	self.cancel.btn.on('touchstart', function(e) {
+	self.cancel.btn.on('click', function(e) {
 		output(['aborted']);
 		clear_timeouts();
 		if (active_item) active_item.unstudy(exp.chooser);
@@ -301,7 +301,7 @@ var Item = function(pars) {
 
 	self.listen = function() {
 
-		self.disp.on('touchstart', function() { // or 'touchstart'
+		self.disp.on('click', function() { // or 'click'
 
 			// if not active, then proceed with study episode
 			if (!self.active && active_item==undefined) {
@@ -330,7 +330,7 @@ var Item = function(pars) {
 
 	self.listen_test = function() {
 
-		self.disp.on('touchstart', function() {
+		self.disp.on('click', function() {
 
 			if (self.active) {
 				self.active = false;
@@ -345,7 +345,7 @@ var Item = function(pars) {
 	}
 
 	self.unlisten = function() {
-		self.disp.on('touchstart', function() {});
+		self.disp.on('click', function() {});
 	};
 
 
@@ -459,9 +459,9 @@ var StudyPhase = function(block) {
 
 	};
 
-	self.controls.start.on('touchstart', function(e) {
+	self.controls.start.on('click', function(e) {
 		output(['start']);
-		self.controls.start.on('touchstart', function() {});
+		self.controls.start.on('click', function() {});
 		self.controls.start.remove();
 		self.begin();
 	});
@@ -474,7 +474,7 @@ var FamiliarizationStudyPhase = function(block) {
 	var self = this,
 		expose_ind;
 	//PREEXPOSE_FAM[cols_to_expose] = [true, false];
-	self.cols_to_expose = ['left', 'right'][block];
+	self.cols_to_expose = ['left', 'right', 'all'][block];
 	outpfx =['familiarization-study', block, self.cols_to_expose];
 	output(['init']);
 
@@ -491,7 +491,7 @@ var FamiliarizationStudyPhase = function(block) {
 	self.x_off = (Number(self.stage.attr("width")) - self.stage_w) / 2 + self.item_w;
 	self.y_off = self.item_h;
 
-	self.stims = shuffle(famitems.slice(block*NUM_FAM_ITEMS, block*NUM_FAM_ITEMS + NUM_FAM_ITEMS));
+	self.stims = shuffle(famitems.slice(block*(NUM_FAM_ITEMS+2), block*(NUM_FAM_ITEMS+2) + (NUM_FAM_ITEMS+2)));
 
 	for (var i=0; i<self.nrow; i++) {
 		for (var j=0; j<self.ncol; j++) {
@@ -580,9 +580,9 @@ var FamiliarizationStudyPhase = function(block) {
 
 	};
 
-	self.controls.start.on('touchstart', function(e) {
+	self.controls.start.on('click', function(e) {
 		output(['start']);
-		self.controls.start.on('touchstart', function(e) {});
+		self.controls.start.on('click', function(e) {});
 		self.controls.start.remove();
 		self.begin();
 	});
@@ -599,7 +599,7 @@ var FamiliarizationTestPhase = function(block) {
 	psiTurk.showPage('stage.html');
 	self.stage = d3.select('#stagesvg');
 	self.nrow = FAM_NROWS;
-	self.ncol = FAM_NCOLS;
+	self.ncol = FAM_NCOLS+1; // 4 items at study, but 6 at test...
 	self.items = [];
 	//self.stage_w = Number(self.stage.attr("width"));
 	self.stage_h = Number(self.stage.attr("height"));
@@ -609,7 +609,7 @@ var FamiliarizationTestPhase = function(block) {
 	self.x_off = (Number(self.stage.attr("width")) - self.stage_w) / 2 + self.item_w;
 	self.y_off = self.item_h;
 
-	self.stims = shuffle(famitems.slice(block*NUM_FAM_ITEMS, block*NUM_FAM_ITEMS+NUM_FAM_ITEMS));
+	self.stims = shuffle(famitems.slice(block*(NUM_FAM_ITEMS+2), block*(NUM_FAM_ITEMS+2)+(NUM_FAM_ITEMS+2)));
 
 	for (var i=0; i<self.nrow; i++) {
 		for (var j=0; j<self.ncol; j++) {
@@ -674,12 +674,12 @@ var FamiliarizationTestPhase = function(block) {
 			item.listen_test();
 		})
 
-		self.done_btn.on('touchstart', function() {
+		self.done_btn.on('click', function() {
 			output(['clicked_done'])
 			self.done_btn.btn.attr('stroke', 'green');
 			self.done_btn.btn.attr('fill', 'green');
 			self.done_btn.btn_frame.attr('stroke', 'green')
-			setTimeout(exp.chooser, 300);
+			setTimeout(exp.chooser, 15000); // a delay to let experimenter explain
 		});
 	}
 
@@ -689,9 +689,9 @@ var FamiliarizationTestPhase = function(block) {
 		}, TEST_INIT_DELAY);
 	};
 
-	self.controls.start.on('touchstart', function(e) {
+	self.controls.start.on('click', function(e) {
 		output(['start']);
-		self.controls.start.on('touchstart', function() {});
+		self.controls.start.on('click', function() {});
 		self.controls.start.remove();
 		self.begin();
 	});
@@ -784,7 +784,7 @@ var TestPhase = function(block) {
 
 
 	$('#continueModal').modal({'show': false});
-	$('#modalCloseButton').on('touchstart', function(e) {
+	$('#modalCloseButton').on('click', function(e) {
 		self.done_btn.btn.attr('stroke', '#D8D8D8')
 						 .attr('fill', 'white');
 		self.done_btn.btn_frame.attr('stroke', '#D8D8D8')
@@ -795,7 +795,7 @@ var TestPhase = function(block) {
 		self.done_btn.btn_frame.attr('stroke', '#D8D8D8')
 	})
 
-	$('#modalContinueButton').on('touchstart', function(e) {
+	$('#modalContinueButton').on('click', function(e) {
 		self.finish();
 	})
 
@@ -810,7 +810,7 @@ var TestPhase = function(block) {
 			item.listen_test();
 		})
 
-		self.done_btn.on('touchstart', function() {
+		self.done_btn.on('click', function() {
 			output(['clicked_done'])
 
 			self.done_btn.btn.attr('stroke', 'green');
@@ -887,7 +887,7 @@ var Summary = function() {
 	output(['COMPLETE']);
 	psiTurk.saveData();
 
-	$('#check-button').on('touchstart', function(e) {
+	$('#check-button').on('click', function(e) {
 		Exit();
 	});
 };
@@ -948,24 +948,24 @@ var Experiment = function() {
 			$('#choose-fam').css('display', 'none');
 			$('#choose-study').css('display', 'none');
 		} else {
-			$('#choose-setup').on('touchstart', function() {
+			$('#choose-setup').on('click', function() {
 				window.location = '/setup';
 			})
 
-			$('#choose-fam').on('touchstart', function() {
+			$('#choose-fam').on('click', function() {
 				self.familiarization();
 			})
 
-			$('#choose-study').on('touchstart', function() {
+			$('#choose-study').on('click', function() {
 				self.study();
 			})
 		}
 
-		$('#choose-test').on('touchstart', function() {
+		$('#choose-test').on('click', function() {
 			self.test();
 		})
 
-		$('#choose-finish').on('touchstart', function() {
+		$('#choose-finish').on('click', function() {
 			self.view= new Summary();
 		})
 
@@ -975,7 +975,7 @@ var Experiment = function() {
 	remaining = range(IMAGES.length);
 	console.log(remaining);
 	// reserve some items for familiarization
-	famitems = range(12); // was 24
+	famitems = range(18); // 3 rounds, 4 fam + 2 nov per round = 18
 	remaining = _.difference(remaining, famitems);
 
 	// setup stimuli for each study round
