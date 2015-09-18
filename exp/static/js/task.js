@@ -303,6 +303,11 @@ var Item = function(pars) {
 
 		self.disp.on('click', function() { // or 'click'
 
+			// GK: modified so another active item will unstudy
+			if (!self.active && active_item!=undefined) {
+				active_item.unstudy();
+			};
+
 			// if not active, then proceed with study episode
 			if (!self.active && active_item==undefined) {
 
@@ -413,7 +418,7 @@ var StudyPhase = function(block) {
 		timeouts.push(to);
 
 	};
-
+	// ToDo: how to make a click on a new item unstudy the old
 	self.study_active = function() {
 		output(['active_study_begin']);
 		block_start_time = timestamp();
@@ -423,8 +428,6 @@ var StudyPhase = function(block) {
 			item.listen();
 		})
 
-		// ToDo: GK - instead of timer, here we want to trakc & limit number of clicks
-		// NUM_ALLOWED_CLICKS
 		// start the timer
 		to = setTimeout(function() {
 			clear_timeouts();
@@ -439,7 +442,6 @@ var StudyPhase = function(block) {
 		$.each(self.items, function(i, item) {
 			item.frame_inactive();
 		});
-		// maybe use self.cols_to_expose here...
 		self.study_active();
 	};
 
