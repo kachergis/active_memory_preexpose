@@ -4,14 +4,14 @@
 var	SEED,
 	FAM_NROWS = 2,
 	FAM_NCOLS = 2,
-	N_FAM_BLOCKS = 3, //4,
+	N_FAM_BLOCKS = 3,
 	NUM_FAM_ITEMS = FAM_NCOLS*FAM_NROWS, // per block
 	FAM_STUDY_BLOCK_TIME = 30000 //2000*NUM_FAM_ITEMS, //60000 * 10,
 	FAM_EXPOSE_DURATION = 6000, // a little long for familiarization
-	STUDY_NROWS = 3,
+	STUDY_NROWS = 2, //3,
 	STUDY_NCOLS = 4,
 	N_STUDY_BLOCKS = 3,
-	ITEMS_PER_STUDY_ROUND = STUDY_NCOLS * STUDY_NROWS,
+	ITEMS_PER_STUDY_ROUND = STUDY_NCOLS * STUDY_NROWS, // was 12, now 8..still show 12 per test trial though
 	TOTAL_STUDY_ITEMS = N_STUDY_BLOCKS * ITEMS_PER_STUDY_ROUND,
 	STUDY_FRAME_DELAY = 0, // was 500..
 	STUDY_DURATION = 'selfpaced', // 'none' | 'selfpaced' | fixed t
@@ -19,10 +19,10 @@ var	SEED,
 	STUDY_INIT_DELAY = 1000,
 	STUDY_EXPOSE = 'free', // 'none' | 'free' | 'snake'
 	NUM_PREEXPOSED = (STUDY_NROWS*STUDY_NCOLS)/2,
-	NUM_ALLOWED_CLICKS = STUDY_NROWS*STUDY_NCOLS,
 	STUDY_EXPOSE_DURATION = 2000*NUM_PREEXPOSED, // how long images are all shown at beginning of study
 	STUDY_COND = ['left','right','all'], // replace with randomization
-	N_TEST_BLOCKS = 6, // how many do we need? 3bl*12=36 items studied, 12 per test...so 6?
+	N_TEST_BLOCKS = 4, // how many do we need? was: 3bl*12=36 items studied, 12 per test...so 6?
+	// now: 3bl*8 = 24, +24 novel = 48..so 4
 	TEST_INIT_DELAY = 1000,
 	TEST_NROWS = 3,
 	TEST_NCOLS = 4,
