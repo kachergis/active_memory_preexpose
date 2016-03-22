@@ -8,7 +8,7 @@ var	SEED,
 	NUM_FAM_ITEMS = FAM_NCOLS*FAM_NROWS, // per block
 	FAM_STUDY_BLOCK_TIME = 30000 //2000*NUM_FAM_ITEMS, //60000 * 10,
 	FAM_EXPOSE_DURATION = 6000, // a little long for familiarization
-	STUDY_NROWS = 2, //3,
+	STUDY_NROWS = 3, // we tried 2 before
 	STUDY_NCOLS = 4,
 	N_STUDY_BLOCKS = 3,
 	ITEMS_PER_STUDY_ROUND = STUDY_NCOLS * STUDY_NROWS, // was 12, now 8..still show 12 per test trial though
@@ -21,7 +21,7 @@ var	SEED,
 	NUM_PREEXPOSED = (STUDY_NROWS*STUDY_NCOLS)/2,
 	STUDY_EXPOSE_DURATION = 2000*NUM_PREEXPOSED, // how long images are all shown at beginning of study
 	STUDY_COND = ['left','right','all'], // replace with randomization
-	N_TEST_BLOCKS = 4, // how many do we need? was: 3bl*12=36 items studied, 12 per test...so 6?
+	N_TEST_BLOCKS = 6, // how many do we need? was: 3bl*12=36 items studied, 12 per test...so 6?
 	// now: 3bl*8 = 24, +24 novel = 48..so 4
 	TEST_INIT_DELAY = 1000,
 	TEST_NROWS = 3,
@@ -984,7 +984,7 @@ var Experiment = function() {
 	stimuli = [];
 	activeitems = [];
 	yi = 0;
-	for (var b=0; b<4; b++) {
+	for (var b=0; b<N_STUDY_BLOCKS; b++) { // was b<4: probable cause of problem of 25% of old items not being tested :/
 		samp = shuffle(remaining.sample(ITEMS_PER_STUDY_ROUND));
 		stimuli.push(samp);
 		activeitems = activeitems.concat(samp);

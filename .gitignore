@@ -6,3 +6,17 @@ exp/.psiturk_history
 exp/participants.db
 
 exp/server.log
+
+exp/.psiturk_history
+
+exp/.psiturk_history
+
+*.csv
+
+*.json
+
+analysis/activememdev-v0-pilot.ipynb
+
+analysis/.ipynb_checkpoints/activememdev-v0-checkpoint.ipynb
+
+analysis/activememdev-v0.ipynb
